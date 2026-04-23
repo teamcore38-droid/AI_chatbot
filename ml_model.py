@@ -197,6 +197,7 @@ DEFAULT_INTENT_EXAMPLES = OrderedDict(
                 "tell me your features",
                 "what do you help with",
                 "your capabilities",
+                "what are you",
             ],
         ),
         (
@@ -342,6 +343,14 @@ DEFAULT_INTENT_EXAMPLES = OrderedDict(
                 "what should i study if i like business",
                 "which program suits me",
                 "best course for me",
+                "data",
+                "security",
+                "business",
+                "accounting",
+                "design",
+                "tourism",
+                "coding",
+                "ai",
             ],
         ),
         (

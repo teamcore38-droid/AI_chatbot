@@ -224,6 +224,116 @@ class InferenceEngine:
 
         return None
 
+    def _is_domain_related(self, normalized_text_value):
+        if not normalized_text_value:
+            return False
+
+        domain_markers = [
+            "course",
+            "courses",
+            "program",
+            "programme",
+            "programs",
+            "degree",
+            "study",
+            "studies",
+            "education",
+            "educational",
+            "counseling",
+            "counselling",
+            "student",
+            "students",
+            "fee",
+            "fees",
+            "duration",
+            "requirement",
+            "requirements",
+            "intake",
+            "admission",
+            "recommend",
+            "suggest",
+            "career",
+            "careers",
+            "job",
+            "jobs",
+            "contact",
+            "counselor",
+            "counsellor",
+        ]
+        topic_markers = [
+            "coding",
+            "programming",
+            "software",
+            "development",
+            "data",
+            "analytics",
+            "statistics",
+            "security",
+            "cyber",
+            "network",
+            "cloud",
+            "system",
+            "systems",
+            "it",
+            "ai",
+            "artificial intelligence",
+            "machine learning",
+            "business",
+            "marketing",
+            "management",
+            "finance",
+            "accounting",
+            "design",
+            "creative",
+            "media",
+            "tourism",
+            "hospitality",
+            "travel",
+            "hotel",
+            "hotels",
+        ]
+
+        if self._mentions_course_context(normalized_text_value):
+            return True
+
+        if any(self._contains_fuzzy_term(normalized_text_value, marker) for marker in domain_markers):
+            return True
+
+        if any(self._contains_fuzzy_term(normalized_text_value, marker) for marker in topic_markers):
+            return True
+
+        return False
+
+    def _handle_off_topic(self, user_input, normalized_input, timestamp):
+        if self.external_llm_client.is_configured():
+            llm_reply = self.external_llm_client.get_fallback_response(user_input)
+            if llm_reply:
+                self.db.log_unknown_query(timestamp, user_input, normalized_input, "off-topic routed to external llm")
+                self.db.log_interaction(timestamp, user_input, normalized_input, "unknown", llm_reply, "external_llm", 0.0)
+                return ChatResult(
+                    response=llm_reply,
+                    intent="unknown",
+                    source="external_llm",
+                    confidence=0.0,
+                    teachable=True,
+                )
+
+        response = self.db.get_random_faq("fallback")
+        if not response:
+            response = (
+                "I am still learning. Ask me about courses, fees, duration, entry requirements, intake dates, "
+                "or type a teaching example if you want to add new knowledge."
+            )
+        self.db.log_unknown_query(timestamp, user_input, normalized_input, "off-topic fallback used")
+        self.db.log_interaction(timestamp, user_input, normalized_input, "unknown", response, "system", 0.0)
+        return ChatResult(
+            response=response,
+            intent="unknown",
+            source="system",
+            confidence=0.0,
+            teachable=True,
+        )
+
     @staticmethod
     def _extract_name_from_intro(user_input):
         text = user_input.strip()
@@ -285,6 +395,7 @@ class InferenceEngine:
             "what do you help with",
             "what is this chatbot about",
             "what are you about",
+            "what are you",
             "who are you",
             "what type of educational counseling assistant are you",
         ]
@@ -306,6 +417,7 @@ class InferenceEngine:
 
         if raw_text in [
             "what are you about",
+            "what are you",
             "what is this chatbot about",
             "what can you do",
             "who are you",
@@ -842,6 +954,26 @@ class InferenceEngine:
 
     def get_response(self, user_input):
         raw_text = self._clean_raw_text(user_input)
+        capability_raw_phrases = [
+            "what are you",
+            "what are you about",
+            "who are you",
+            "what is this chatbot about",
+            "what can you do",
+            "what do you help with",
+            "what type of educational counseling assistant are you",
+        ]
+        if raw_text in capability_raw_phrases:
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            response = self.db.get_random_faq("capabilities")
+            if not response:
+                response = (
+                    "I am an education counseling assistant built to help students explore courses, "
+                    "fees, duration, requirements, intake dates, and recommendations."
+                )
+            self.db.log_interaction(timestamp, user_input, raw_text, "capabilities", response, "rule", 1.0)
+            return ChatResult(response=response, intent="capabilities", source="rule", confidence=1.0)
+
         if raw_text in ["how are you", "how are u", "how do you do"]:
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             response = "I am doing well, thanks for asking. How can I help with your course search today?"
@@ -869,6 +1001,9 @@ class InferenceEngine:
                 confidence = 1.0
                 self.db.log_interaction(timestamp, user_input, normalized_input, rule_intent, response, source, confidence)
                 return ChatResult(response=response, intent=rule_intent, source=source, confidence=confidence)
+
+        if not self._is_domain_related(normalized_input):
+            return self._handle_off_topic(user_input, normalized_input, timestamp)
 
         model_intent, confidence = self.intent_model.predict(user_input)
         if model_intent:

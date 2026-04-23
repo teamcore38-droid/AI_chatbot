@@ -46,7 +46,8 @@
       "what do you help with",
       "what can this chatbot do",
       "who are you",
-      "tell me your features"
+      "tell me your features",
+      "what are you"
     ]
   },
   {
@@ -192,7 +193,15 @@
       "i want to study ai",
       "recommend a course for me",
       "what should i study if i like business",
-      "suggest a course based on my interests"
+      "suggest a course based on my interests",
+      "data",
+      "security",
+      "business",
+      "accounting",
+      "design",
+      "tourism",
+      "coding",
+      "ai"
     ]
   },
   {
