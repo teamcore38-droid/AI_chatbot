@@ -1,0 +1,218 @@
+[
+  {
+    "intent": "greeting",
+    "utterances": [
+      "hello",
+      "hi there",
+      "good morning",
+      "good afternoon",
+      "hey counselor"
+    ]
+  },
+  {
+    "intent": "goodbye",
+    "utterances": [
+      "bye",
+      "goodbye",
+      "see you later",
+      "exit the chat",
+      "close chat"
+    ]
+  },
+  {
+    "intent": "thanks",
+    "utterances": [
+      "thank you",
+      "thanks a lot",
+      "much appreciated",
+      "cheers",
+      "thanks"
+    ]
+  },
+  {
+    "intent": "help",
+    "utterances": [
+      "help me",
+      "what can you do",
+      "how can you help",
+      "show me options",
+      "what support do you give"
+    ]
+  },
+  {
+    "intent": "capabilities",
+    "utterances": [
+      "what is this chatbot about",
+      "what do you help with",
+      "what can this chatbot do",
+      "who are you",
+      "tell me your features"
+    ]
+  },
+  {
+    "intent": "education_info",
+    "utterances": [
+      "what is education",
+      "tell me about education",
+      "what is educational counseling",
+      "what does education mean",
+      "explain education"
+    ]
+  },
+  {
+    "intent": "course_list",
+    "utterances": [
+      "what courses do you offer",
+      "what courses are available",
+      "list available courses",
+      "show all programs",
+      "what courses you have"
+    ]
+  },
+  {
+    "intent": "fee_list",
+    "utterances": [
+      "give fees of courses",
+      "show course fees",
+      "what are the fees",
+      "course fees",
+      "tell me all fees",
+      "tell me about the fees",
+      "tell me the fees"
+    ]
+  },
+  {
+    "intent": "most_expensive_course",
+    "utterances": [
+      "what is the most expensive course",
+      "which course is the most expensive",
+      "highest fee course",
+      "most costly course"
+    ]
+  },
+  {
+    "intent": "cheapest_course",
+    "utterances": [
+      "what is the cheapest course",
+      "which course is the cheapest",
+      "lowest fee course",
+      "most cheap course"
+    ]
+  },
+  {
+    "intent": "duration_list",
+    "utterances": [
+      "show course durations",
+      "what are the durations",
+      "duration of courses",
+      "course duration list",
+      "how long are the courses",
+      "tell me about the durations",
+      "tell me the durations",
+      "show me the durations"
+    ]
+  },
+  {
+    "intent": "requirements_list",
+    "utterances": [
+      "tell me about the requirements",
+      "show me the requirements",
+      "what are the requirements",
+      "what are the entry requirements",
+      "course requirements"
+    ]
+  },
+  {
+    "intent": "intake_list",
+    "utterances": [
+      "tell me about the intake dates",
+      "show me the intake dates",
+      "what are the intake dates",
+      "what are the intakes",
+      "intake dates"
+    ]
+  },
+  {
+    "intent": "course_detail",
+    "utterances": [
+      "tell me about computer science",
+      "give details about cyber security",
+      "what is data science about",
+      "information about software engineering",
+      "course overview",
+      "what do we have in cyber security course",
+      "what is included in the computer science course",
+      "show me cyber security details"
+    ]
+  },
+  {
+    "intent": "course_fee",
+    "utterances": [
+      "how much is computer science",
+      "what is the fee for business management",
+      "cost of data science",
+      "tuition fee for cyber security",
+      "price of the course"
+    ]
+  },
+  {
+    "intent": "course_duration",
+    "utterances": [
+      "how long is software engineering",
+      "what is the duration of computer science",
+      "how many years is the course",
+      "course length",
+      "study period"
+    ]
+  },
+  {
+    "intent": "course_requirements",
+    "utterances": [
+      "what are the entry requirements",
+      "eligibility for cyber security",
+      "what do i need to apply",
+      "admission requirements",
+      "course prerequisites"
+    ]
+  },
+  {
+    "intent": "course_intake",
+    "utterances": [
+      "when is the intake for computer science",
+      "when does business management start",
+      "next intake date",
+      "course intake",
+      "admission date"
+    ]
+  },
+  {
+    "intent": "recommendation",
+    "utterances": [
+      "i like coding and programming",
+      "i want to study ai",
+      "recommend a course for me",
+      "what should i study if i like business",
+      "suggest a course based on my interests"
+    ]
+  },
+  {
+    "intent": "contact",
+    "utterances": [
+      "contact details",
+      "office hours",
+      "email address",
+      "phone number",
+      "where is the office"
+    ]
+  },
+  {
+    "intent": "language_help",
+    "utterances": [
+      "can you understand i speak",
+      "do you understand me",
+      "can you understand me",
+      "do you understand english",
+      "i can not type well"
+    ]
+  }
+]

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Educational Counseling Chatbot | Home{% endblock %}
+{% block body %}
+<main class="landing-page">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+
+  <section class="hero-card">
+    <div class="hero-badge">Domain-based assistant</div>
+    <h1>Guidance for students, built as a focused educational counseling chatbot.</h1>
+    <p>
+      Explore courses, fees, entry requirements, intake dates, and recommendations through a clean
+      conversational web interface designed for your assignment demo.
+    </p>
+    <div class="hero-actions">
+      <a class="primary-btn" href="{{ url_for('chat') }}">Open Chatbot</a>
+      <a class="secondary-btn" href="#features">See Features</a>
+    </div>
+  </section>
+
+  <section class="feature-grid" id="features">
+    <article class="feature-card">
+      <h3>Natural Language Interface</h3>
+      <p>Students can ask plain-English questions in a simple chat layout.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Inference Engine</h3>
+      <p>Rule-based and ML intent detection decides the correct response path.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Knowledge Base</h3>
+      <p>Course, FAQ, and contact data are stored in SQLite for persistent retrieval.</p>
+    </article>
+  </section>
+</main>
+{% endblock %}

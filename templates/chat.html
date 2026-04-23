@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Educational Counseling Chatbot | Chat{% endblock %}
+{% block body %}
+<main class="app-shell">
+  <header class="topbar">
+    <div>
+      <div class="app-title">Educational Counseling Chatbot</div>
+      <div class="app-subtitle">A domain-based assistant for course advice, fees, requirements, and recommendations.</div>
+    </div>
+    <a class="top-link" href="{{ url_for('landing') }}">Home</a>
+  </header>
+
+  <section class="info-strip">
+    <div class="section-label">Ask natural questions like:</div>
+    <div class="example-text">What courses do you offer? | Tell me about the fees | Recommend a course for coding</div>
+  </section>
+
+  <section class="chat-layout">
+    <div class="chat-panel">
+      <div id="chat-area" class="chat-area" data-welcome="{{ welcome_message|e }}"></div>
+
+      <div class="composer">
+        <input id="chat-input" type="text" placeholder="Type your question here..." autocomplete="off">
+        <button id="send-btn" class="action-btn primary">Send</button>
+        <button id="clear-btn" class="action-btn">Clear</button>
+        <button id="teach-btn" class="action-btn">Teach Bot</button>
+      </div>
+
+      <div id="status-line" class="status-line">Ready</div>
+    </div>
+
+    <aside class="side-panel">
+      <div class="panel-block">
+        <div class="section-label">Quick Actions</div>
+        <div class="quick-list">
+          {% for label, question in quick_actions %}
+          <button class="quick-btn" data-question="{{ question|e }}">{{ label }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="panel-block">
+        <div class="section-label">Teaching Format</div>
+        <p class="helper-text">Use Teach Bot to add new Q&A knowledge and refresh the model.</p>
+        <p class="helper-text">Tip: the bot learns from approved examples stored in the database.</p>
+      </div>
+    </aside>
+  </section>
+
+  <div id="teach-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="teach-title">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="teach-title">Teach Bot</h2>
+        <button id="teach-close" class="icon-btn" aria-label="Close">×</button>
+      </div>
+      <label>Question
+        <input id="teach-question" type="text" placeholder="Enter the question the bot should learn">
+      </label>
+      <label>Intent
+        <input id="teach-intent" type="text" placeholder="e.g. scholarship, course_fee, custom_faq">
+      </label>
+      <label>Answer
+        <textarea id="teach-answer" rows="4" placeholder="Enter the answer the bot should give"></textarea>
+      </label>
+      <div class="modal-actions">
+        <button id="teach-cancel" class="action-btn">Cancel</button>
+        <button id="teach-save" class="action-btn primary">Save Knowledge</button>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+{% block scripts %}
+<script>
+  window.CHAT_CONFIG = {
+    welcomeMessage: {{ welcome_message|tojson }},
+    teachUrl: "{{ url_for('api_teach') }}",
+    chatUrl: "{{ url_for('api_chat') }}",
+  };
+</script>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,6 @@
+nltk
+scikit-learn
+openai
+python-dotenv
+spacy
+flask
