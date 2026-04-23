@@ -184,7 +184,8 @@ class InferenceEngine:
             "information about",
         ]
 
-        if not self._mentions_course_context(normalized_text_value):
+        specific_course_matches = self.db.find_course_mentions(normalized_text_value)
+        if not specific_course_matches:
             return False
 
         if any(self._contains_phrase(normalized_text_value, marker) for marker in detail_markers):
@@ -193,6 +194,42 @@ class InferenceEngine:
         return any(
             self._contains_fuzzy_term(normalized_text_value, term)
             for term in ["detail", "details", "about", "information", "info", "have", "contains"]
+        )
+
+    def _looks_like_course_list_query(self, normalized_text_value):
+        list_markers = [
+            "what courses do you have",
+            "what courses are available",
+            "what courses do you offer",
+            "what courses you have",
+            "tell me about courses",
+            "tell me about courses you have",
+            "courses you have",
+            "courses available",
+            "available courses",
+            "available programs",
+            "show all courses",
+            "show all programs",
+            "list courses",
+            "list available courses",
+            "what do you have",
+        ]
+
+        if any(self._contains_phrase(normalized_text_value, marker) for marker in list_markers):
+            return True
+
+        if not self._mentions_course_context(normalized_text_value):
+            return False
+
+        if self.db.find_course_mentions(normalized_text_value):
+            return False
+
+        return (
+            (
+                self._contains_any(normalized_text_value, ["course", "courses", "program", "programs"])
+                or any(self._contains_fuzzy_term(normalized_text_value, term) for term in ["course", "program"])
+            )
+            and self._contains_any(normalized_text_value, ["have", "offer", "available", "show", "list", "provide"])
         )
 
     def _looks_like_price_extreme_query(self, normalized_text_value):
@@ -532,6 +569,8 @@ class InferenceEngine:
                 return "requirements"
             if self._contains_any(normalized_text_value, ["intake", "admission"]) or self._contains_fuzzy_term(normalized_text_value, "intake"):
                 return "intake"
+            if self._looks_like_course_list_query(normalized_text_value):
+                return "course_list"
             if self._looks_like_course_detail_query(normalized_text_value):
                 return "description"
 
@@ -545,7 +584,7 @@ class InferenceEngine:
         ):
             return "contact"
 
-        if self._contains_all(normalized_text_value, ["cours", "avail"]):
+        if self._looks_like_course_list_query(normalized_text_value):
             return "course_list"
 
         if self._contains_all(normalized_text_value, ["cours"]) and self._contains_any(
@@ -568,7 +607,15 @@ class InferenceEngine:
 
         if any(
             self._contains_phrase(normalized_text_value, phrase)
-            for phrase in ["what courses do you offer", "available courses", "list available courses", "show all programs"]
+            for phrase in [
+                "what courses do you offer",
+                "what courses do you have",
+                "what courses you have",
+                "available courses",
+                "list available courses",
+                "show all programs",
+                "tell me about courses you have",
+            ]
         ):
             return "course_list"
 

@@ -208,6 +208,12 @@ DEFAULT_INTENT_EXAMPLES = OrderedDict(
                 "show all programs",
                 "which courses are available",
                 "available courses",
+                "what courses do you have",
+                "what courses you have",
+                "tell me about courses",
+                "tell me about courses you have",
+                "courses you have",
+                "what corses do you have",
             ],
         ),
         (
